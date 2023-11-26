@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.overall {
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    line-height: 80px;
+    cursor: pointer;
+}
+.customt {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.6);
+}
+
+.custom {
+   position: absolute;
+   inset: 0;
+   width: 0%;
+   color: var(--clr);
+   overflow: hidden;
+   border-right: 6px solid var(--clr);
+   transition: 0.5s ease-in-out;
+  }
+  
+  
+  .overall:hover .custom {
+    width: 100%;
+    filter: drop-shadow(0 0 40px var(--clr));
+  }
