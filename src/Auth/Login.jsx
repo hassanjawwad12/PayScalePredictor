@@ -22,7 +22,7 @@ const Login = () => {
       return;
     }
 
-    window.location.href = "/";
+    window.location.href = "/predict";
   };
 
 

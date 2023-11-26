@@ -24,7 +24,7 @@ const Signup = () => {
       return;
     }
 
-    window.location.href = "/";
+    window.location.href = "/predict";
   };
 
 
