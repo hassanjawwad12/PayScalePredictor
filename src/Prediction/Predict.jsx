@@ -7,59 +7,60 @@ const Predict = () => {
   const [hours, setHours] = useState("");
   const [gender, setGender] = useState("");
   const [workClass, setWorkClass] = useState("");
+  const [race,setRace] = useState("");
 
   const workOption = [
-    "Federal-gov",
-    "Local-gov",
-    "Private",
-    "Self-emp-inc",
-    "Self-emp-not-inc",
-    "State-gov",
-    "Without-pay",
+    "workclass_Federal-gov",
+    "workclass_Local-gov",
+    "workclass_Private",
+    "workclass_Self-emp-inc",
+    "workclass_Self-emp-not-inc",
+    "workclass_State-gov",
+    "workclass_Without-pay",
   ];
 
   const OccupationList = [
-    "Adm-clerical",
-    "Armed-Forces",
-    "Craft-repair",
-    "Exec-managerial",
-    "Farming-fishing",
-    "Handlers-cleaners",
-    "Machine-op-inspct",
-    "Other-service",
-    "Priv-house-serv",
-    "Prof-specialty",
-    "Protective-serv",
-    "Sales",
-    "Tech-support",
-    "Transport-moving",
+    "occupation_Adm-clerical",
+    "occupation_Armed-Forces",
+    "occupation_Craft-repair",
+    "occupation_Exec-managerial",
+    "occupation_Farming-fishing",
+    "occupation_Handlers-cleaners",
+    "occupation_Machine-op-inspct",
+    "occupation_Other-service",
+    "occupation_Priv-house-serv",
+    "occupation_Prof-specialty",
+    "occupation_Protective-serv",
+    "occupation_Sales",
+    "occupation_Tech-support",
+    "occupation_Transport-moving",
   ];
 
   const educationOptions = [
-    "10th",
-    "11th",
-    "12th",
-    "1st-4th",
-    "5th-6th",
-    "7th-8th",
-    "9th",
-    "Assoc-acdm",
-    "Assoc-voc",
-    "Bachelors",
-    "Doctorate",
-    "HS-grad",
-    "Masters",
-    "Preschool",
-    "Prof-school",
-    "Some-college",
+    "education_10th",
+    "education_11th",
+    "education_12th",
+    "education_1st-4th",
+    "education_5th-6th",
+    "education_7th-8th",
+    "education_9th",
+    "education_Assoc-acdm",
+    "education_Assoc-voc",
+    "education_Bachelors",
+    "education_Doctorate",
+    "education_HS-grad",
+    "education_Masters",
+    "education_Preschool",
+    "education_Prof-school",
+    "education_Some-college",
   ];
 
   const RaceList = [
-    "Amer-Indian-Eskimo",
-    "Asian-Pac-Islander",
-    "Black",
-    "Other",
-    "White",
+    "race_Amer-Indian-Eskimo",
+    "race_Asian-Pac-Islander",
+    "race_Black",
+    "race_Other",
+    "race_White",
   ];
 
   const handleSubmit = (e) => {
@@ -70,7 +71,81 @@ const Predict = () => {
       return;
     }
 
-    console.log("Input data:", { age, education, occupation, hours, gender });
+    // Initialize the data object with default values (0)
+    const formData = {
+      age: Number(age),
+      hours: Number(hours),
+      gender_Female: gender === "Female" ? 1 : 0,
+      gender_Male: gender === "Male" ? 1 : 0,
+      workclass_Federal_gov: 0,
+      workclass_Local_gov: 0,
+      workclass_Private: 0,
+      workclass_Self_emp_inc: 0,
+      workclass_Self_emp_not_inc: 0,
+      workclass_State_gov: 0,
+      workclass_Without_pay: 0,
+      occupation_Adm_clerical: 0,
+      occupation_Armed_Forces: 0,
+      occupation_Craft_repair: 0,
+      occupation_Exec_managerial: 0,
+      occupation_Farming_fishing: 0,
+      occupation_Handlers_cleaners: 0,
+      occupation_Machine_op_inspct: 0,
+      occupation_Other_service: 0,
+      occupation_Priv_house_serv: 0,
+      occupation_Prof_specialty: 0,
+      occupation_Protective_serv: 0,
+      occupation_Sales: 0,
+      occupation_Tech_support: 0,
+      occupation_Transport_moving: 0,
+      race_Amer_Indian_Eskimo: 0,
+      race_Asian_Pac_Islander: 0,
+      race_Black: 0,
+      race_Other: 0,
+      race_White: 0,
+      education_10th: 0,
+      education_11th: 0,
+      education_12th: 0,
+      education_1st_4th: 0,
+      education_5th_6th: 0,
+      education_7th_8th: 0,
+      education_9th: 0,
+      education_Assoc_acdm: 0,
+      education_Assoc_voc: 0,
+      education_Bachelors: 0,
+      education_Doctorate: 0,
+      education_HS_grad: 0,
+      education_Masters: 0,
+      education_Preschool: 0,
+      education_Prof_school: 0,
+      education_Some_college: 0,
+    };
+
+    // Set selected values to 1
+    formData.age = Number(age);
+    formData.hours = Number(hours);
+    formData.gender = gender === "Male" ? 1 : 0;
+    formData.workClass = {};
+    workOption.forEach((option) => {
+      formData.workClass[option.replace("-", "_")] =
+        option === workClass ? 1 : 0;
+    });
+    formData.education = {};
+    educationOptions.forEach((option) => {
+      formData.education[option.replace("-", "_")] =
+        option === education ? 1 : 0;
+    });
+    formData.occupation = {};
+    OccupationList.forEach((option) => {
+      formData.occupation[option.replace("-", "_")] =
+        option === occupation ? 1 : 0;
+    });
+    formData.race = {};
+    RaceList.forEach((option) => {
+      formData.race[option.replace("-", "_")] = option === race ? 1 : 0;
+    });
+
+    console.log("Input data:", formData);
   };
 
   return (
@@ -155,7 +230,7 @@ const Predict = () => {
           <p className="text-white text-xl font-bold">Race</p>
           <select
             className=" w-full p-2.5 rounded-lg focus:outline-none bg-indigo-400 text-white font-bold"
-            onChange={(e) => setOccupation(e.target.value)}
+            onChange={(e) => setRace(e.target.value)}
           >
             <option value="">Select Race/Ethnicity</option>
             {RaceList.map((option) => (
@@ -177,3 +252,12 @@ const Predict = () => {
 };
 
 export default Predict;
+
+/*    
+
+
+  
+
+  
+
+      */
