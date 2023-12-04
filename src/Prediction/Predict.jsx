@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useRef  } from "react";
 import Output from "./Output";
 
 const Predict = () => {
@@ -10,8 +10,21 @@ const Predict = () => {
   const [workClass, setWorkClass] = useState("");
   const [race, setRace] = useState("");
   //for testing purpose
-  const salary = "greater than 50000$";
+  const [salary,setSalary] = useState("");
   const [toggling, setToggling] = useState(false);
+  const isMounted = useRef(false);
+  const toggle = () => {
+    setToggling(!toggling);
+  };
+  
+
+  useEffect(() => {
+      // This code will run on salary updates, but not the first render
+      // Place your side effects here
+      toggle()
+
+    
+  }, [salary]);
 
   const workOption = [
     "workclass_Federal-gov",
@@ -60,8 +73,8 @@ const Predict = () => {
   ];
 
   const RaceList = [
-    "race_Amer-Indian-Eskimo",
-    "race_Asian-Pac-Islander",
+    "race_Amer_Indian_Eskimo",
+    "race_Asian_Pac_Islander",
     "race_Black",
     "race_Other",
     "race_White",
@@ -107,9 +120,88 @@ const Predict = () => {
       formData.race[option.replace("-", "_")] = option === race ? 1 : 0;
     });
 
+    var json={
+      "age": formData.age,
+      "hours-per-week": formData.hours,
+      "workclass_Federal-gov": formData.workClass.workclass_Federal_gov,
+      "workclass_Local-gov": formData.workClass.workclass_Local_gov,
+      "workclass_Private": formData.workClass.workclass_Private,
+      "workclass_Self-emp-inc": formData.workClass["workclass_Self_emp-inc"],
+      "workclass_Self-emp-not-inc":  formData.workClass["workclass_Self_emp-not-inc"],
+      "workclass_State-gov": formData.workClass.workclass_State_gov,
+      "workclass_Without-pay": formData.workClass.workclass_Without_pay,
+      "education_10th": formData.education.education_10th,
+      "education_11th": formData.education.education_11th,
+      "education_12th": formData.education.education_12th,
+      "education_1st-4th": formData.education.education_1st_4th,
+      "education_5th-6th": formData.education.education_5th_6th,
+      "education_7th-8th": formData.education.education_7th_8th,
+      "education_9th": formData.education.education_9th,
+      "education_Assoc-acdm": formData.education.education_Assoc_acdm,
+      "education_Assoc-voc": formData.education.education_Assoc_voc,
+      "education_Bachelors": formData.education.education_Bachelors,
+      "education_Doctorate": formData.education.education_Doctorate,
+      "education_HS-grad": formData.education.education_HS_grad,
+      "education_Masters": formData.education.education_Masters,
+      "education_Preschool": formData.education.education_Preschool,
+      "education_Prof-school": formData.education.education_Prof_school,
+      "education_Some-college": formData.education.education_Some_college,
+      "occupation_Adm-clerical": formData.occupation.occupation_Adm_clerical,
+      "occupation_Armed-Forces": formData.occupation.occupation_Armed_Forces,
+      "occupation_Craft-repair": formData.occupation.occupation_Craft_repair,
+      "occupation_Exec-managerial": formData.occupation.occupation_Exec_managerial,
+      "occupation_Farming-fishing": formData.occupation.occupation_Farming_fishing,
+      "occupation_Handlers-cleaners": formData.occupation.occupation_Handlers_cleaners,
+      "occupation_Machine-op-inspct": formData.occupation["occupation_Machine_op-inspct"],
+      "occupation_Other-service": formData.occupation.occupation_Other_service,
+      "occupation_Priv-house-serv": formData.occupation["occupation_Priv_house-serv"],
+      "occupation_Prof-specialty": formData.occupation.occupation_Prof_specialty,
+      "occupation_Protective-serv": formData.occupation.occupation_Protective_serv,
+      "occupation_Sales": formData.occupation.occupation_Sales,
+      "occupation_Tech-support": formData.occupation.occupation_Tech_support,
+      "occupation_Transport-moving": formData.occupation.occupation_Transport_moving,
+      "gender_Female": formData.gender_Female,
+      "race_Amer-Indian-Eskimo": formData.race.race_Amer_Indian_Eskimo,
+      "race_Asian-Pac-Islander": formData.race["race_Asian_Pac_Islander"],
+      "race_Black": formData.race.race_Black,
+      "race_Other": formData.race.race_Other,
+      "race_White": formData.race.race_White,
+      "gender_Male": formData.gender_Male,
+      "native-country_United-States": 1,
+    }
+
+
+    fetch('http://127.0.0.1:5000/predict', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(json) // Ensure your 'json' variable is correctly formatted
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok: ' + response.statusText);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data); // Process your data here
+      if (data.status == 0){
+        setSalary("less than 50,000$");
+      }
+      else{
+        setSalary("greater than 50,000$");
+      }
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+    
+
+
     console.log("Input data:", formData);
+    console.log("Input data:", json);
     //window.location.href = '/output';
-    setToggling(true);
   };
 
   return (
@@ -187,7 +279,7 @@ const Predict = () => {
                 className=" w-full p-2.5 rounded-lg focus:outline-none bg-indigo-400 text-white font-bold"
                 onChange={(e) => setOccupation(e.target.value)}
               >
-                <option value="">Select Work-class</option>
+                <option value="">Select Occupation</option>
                 {OccupationList.map((option) => (
                   <option key={option} value={option}>
                     {option}
